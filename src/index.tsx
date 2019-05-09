@@ -269,11 +269,7 @@ export class Rnd extends React.Component<Props, State> {
         return boundary.offsetWidth;
     }
   }
-
-  onDragStart(e: RndDragEvent, data: DraggableData) {
-    if (this.props.onDragStart) {
-      this.props.onDragStart(e, data);
-    }
+  setBounds() {
     if (!this.props.bounds) return;
     const parent = this.getParent();
     const scale = this.props.scale as number;
@@ -324,6 +320,13 @@ export class Rnd extends React.Component<Props, State> {
         left: left - offset.left / scale,
       },
     });
+  }
+  onDragStart(e: RndDragEvent, data: DraggableData) {
+    if (this.props.onDragStart) {
+      this.props.onDragStart(e, data);
+    }
+    this.setBounds();
+
   }
 
   onDrag(e: RndDragEvent, data: DraggableData) {
@@ -491,6 +494,7 @@ export class Rnd extends React.Component<Props, State> {
   updateSize(size: { width: number | string; height: number | string }) {
     if (!this.resizable) return;
     this.resizable.updateSize({ width: size.width, height: size.height });
+    this.setBounds();
   }
 
   updatePosition(position: Position) {
